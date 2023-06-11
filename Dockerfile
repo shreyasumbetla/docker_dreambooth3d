@@ -125,12 +125,21 @@ RUN /opt/conda/bin/python -m pip --no-cache-dir install cmake==${CMAKE_VERSION} 
     pytorch-lightning torchmetrics kornia scipy scikit-image \
     && /opt/conda/bin/conda install -y ffmpeg=4.2.2 mpi4py \
     && /opt/conda/bin/conda clean -ya
-	
+
+RUN /opt/conda/bin/python -m pip --no-cache-dir install nerfstudio==0.2.2		
+RUN /opt/conda/bin/python -m pip install cprint diffusers accelerate sentence_transformers ninja imageio-ffmpeg moviepy vispy einops		
+RUN /opt/conda/bin/python -m pip install git+https://github.com/kornia/kornia		
+RUN sudo apt update && sudo apt install python-dev -y		
+RUN /opt/conda/bin/python -m pip install -v -U git+https://github.com/facebookresearch/xformers.git@main#egg=xformers		
+RUN /opt/conda/bin/python -m pip install -v pysdf networkx trimesh[easy] xatlas libigl jaxtyping omegaconf typeguard git+https://github.com/NVlabs/nvdiffrast.git triton
+
 WORKDIR /
 
 ENV PIP3I="python3 -m pip install  --upgrade "
 
-RUN $PIP3I timm tensorboardX blobfile gpustat torchinfo fairseq==0.10.0 click einops
+RUN $PIP3I timm tensorboardX blobfile gpustat torchinfo fairseq==0.10.0 click einops safetensors chumpy face_alignment
+RUN FORCE_CUDA=1 $PIP3I "git+https://github.com/facebookresearch/pytorch3d.git"
+
 
 
 RUN mkdir -p /hooks
